@@ -6,7 +6,7 @@ const LoginCounter = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-
+  const API_URL = process.env.REACT_APP_API_URL || "https://demcalo.onrender.com";
 
   useEffect(() => {
     let isMounted = true;
@@ -14,7 +14,7 @@ const LoginCounter = () => {
     const fetchStats = async () => {
       try {
         // Gọi API với thông tin xác thực
-        const response = await axios.get(`https://demcalo.onrender.com/api/stats/login-count`, {
+        const response = await axios.get(`${API_URL}/api/stats/login-count`, {
           withCredentials: true,
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -45,7 +45,7 @@ const LoginCounter = () => {
       isMounted = false;
       clearInterval(interval);
     };
-  }, ["https://demcalo.onrender.com"]);
+  }, [API_URL]);
 
   if (loading)
     return (

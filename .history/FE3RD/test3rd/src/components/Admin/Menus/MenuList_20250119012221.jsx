@@ -3,6 +3,7 @@ import { Table, Button, Popconfirm, message, Space } from "antd";
 import axios from "axios";
 import MenuForm from "./MenuForm";
 
+const API_URL = process.env.REACT_APP_API_URL;
 
 const MenuList = () => {
   const [menus, setMenus] = useState([]);
@@ -17,7 +18,7 @@ const MenuList = () => {
   const fetchMenus = async () => {
     setLoading(true);
     try {
-      const response = await axios.get(`https://countlory.onrender.com/api/menus`);
+      const response = await axios.get(`${API_URL}/menus`);
       setMenus(response.data.data);
     } catch (error) {
       message.error("Failed to fetch menus");
@@ -28,7 +29,7 @@ const MenuList = () => {
 
   const handleDelete = async (id) => {
     try {
-      await axios.delete(`https://countlory.onrender.com/api/menus/${id}`);
+      await axios.delete(`${API_URL}/menus/${id}`);
       message.success("Menu deleted successfully");
       fetchMenus();
     } catch (error) {

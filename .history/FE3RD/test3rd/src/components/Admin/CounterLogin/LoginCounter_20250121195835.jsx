@@ -6,7 +6,7 @@ const LoginCounter = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-
+  const API_URL = process.env.REACT_APP_API_URL || "";
 
   useEffect(() => {
     let isMounted = true;
@@ -45,7 +45,7 @@ const LoginCounter = () => {
       isMounted = false;
       clearInterval(interval);
     };
-  }, ["https://demcalo.onrender.com"]);
+  }, [API_URL]);
 
   if (loading)
     return (

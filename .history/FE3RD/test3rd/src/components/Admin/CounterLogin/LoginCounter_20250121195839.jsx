@@ -45,7 +45,7 @@ const LoginCounter = () => {
       isMounted = false;
       clearInterval(interval);
     };
-  }, ["https://demcalo.onrender.com"]);
+  }, [API_URL]);
 
   if (loading)
     return (

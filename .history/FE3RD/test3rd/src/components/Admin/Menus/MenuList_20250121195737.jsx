@@ -28,7 +28,7 @@ const MenuList = () => {
 
   const handleDelete = async (id) => {
     try {
-      await axios.delete(`https://countlory.onrender.com/api/menus/${id}`);
+      await axios.delete(`${API_URL}/menus/${id}`);
       message.success("Menu deleted successfully");
       fetchMenus();
     } catch (error) {

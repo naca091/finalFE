@@ -10,76 +10,28 @@ const Login = () => {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
-  // const onFinish = async (values) => {
-  //   setLoading(true);
-  //   try {
-  //     const response = await axios.post(
-  //       "http://localhost:5000/api/auth/login",
-  //       {
-  //         email: values.email,
-  //         password: values.password,
-  //       }
-  //     );
-
-  //     if (response.data.success) {
-  //       // Lưu token vào localStorage
-  //       localStorage.setItem("token", response.data.token);
-
-  //       message.success("Login successful!");
-
-  //       // Chuyển hướng đến homepage với thông tin user
-  //       navigate("/user/homepage", {
-  //         state: {
-  //           userEmail: response.data.userEmail,
-  //           userxu: response.data.userxu,
-  //         },
-  //       });
-  //     } else {
-  //       message.error(response.data.message || "Login failed");
-  //     }
-  //   } catch (error) {
-  //     console.error("Login error:", error);
-  //     message.error(error.response?.data?.message || "Login failed");
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // };
   const onFinish = async (values) => {
     setLoading(true);
     try {
-      const response = await axios.post(
-        "https://demcalo.onrender.com/api/auth/login",
-        {
-          email: values.email,
-          password: values.password,
+        const response = await axios.post(
+            "https://demcalo.onrender.com/api/auth/login",
+            {
+                email: values.email,
+                password: values.password,
+            }
+        );
+
+        if (response.data.success) {
+            localStorage.setItem("token", response.data.token);
+            message.success("Login successful!");
+            navigate("/user/homepage");
         }
-      );
-
-      if (response.data.success) {
-        // Lưu token và roleId
-        localStorage.setItem("token", response.data.token);
-        localStorage.setItem("roleId", response.data.roleId);
-
-        message.success("Login successful!");
-
-        // Điều hướng dựa trên roleId
-        if (response.data.roleId === 1) {
-          navigate("/admin/dashboard"); // Admin
-        } else if (response.data.roleId === 2) {
-          navigate("/user/homepage"); // User
-        } else {
-          message.error("Unknown role. Contact support.");
-        }
-      } else {
-        message.error(response.data.message || "Login failed");
-      }
     } catch (error) {
-      console.error("Login error:", error);
-      message.error(error.response?.data?.message || "Login failed");
-    } finally {
-      setLoading(false);
+        console.error("Login error:", error);
+        message.error(error.response?.data?.message || "Login failed");
     }
-  };
+    setLoading(false);
+};
 
   return (
     <div className="login">

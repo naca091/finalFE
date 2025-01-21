@@ -59,7 +59,7 @@ const Homepage = () => {
       }
 
       try {
-        const response = await axios.get("https://demcalo.onrender.com/api/auth/me", {
+        const response = await axios.get("http://localhost:5000/api/auth/me", {
           headers: { Authorization: `Bearer ${token}` },
         });
         if (response.data.success) {
@@ -80,7 +80,7 @@ const Homepage = () => {
     };
     const fetchMenus = async () => {
       try {
-        const response = await axios.get("https://demcalo.onrender.com/api/menus");
+        const response = await axios.get("http://localhost:5000/api/menus");
         if (response.data.success) {
           setMenus(response.data.data);
           setFilteredMenus(response.data.data);
@@ -247,7 +247,7 @@ const Homepage = () => {
                 cover={
                   <img
                     alt={menu.name}
-                    src={`https://demcalo.onrender.com${menu.image}`}
+                    src={`http://localhost:5000${menu.image}`}
                     onError={(e) => {
                       e.target.onerror = null;
                       e.target.src = "/placeholder.jpg";

@@ -247,7 +247,7 @@ const Homepage = () => {
                 cover={
                   <img
                     alt={menu.name}
-                    src={`https://demcalo.onrender.com${menu.image}`}
+                    src={`http://localhost:5000${menu.image}`}
                     onError={(e) => {
                       e.target.onerror = null;
                       e.target.src = "/placeholder.jpg";

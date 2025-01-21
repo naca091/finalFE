@@ -51,46 +51,52 @@ const Homepage = () => {
 
   useEffect(() => {
     const fetchUserData = async () => {
-      const token = localStorage.getItem("token");
-      if (!token) {
-        message.error("You are not logged in. Redirecting to login...");
-        navigate("/login");
-        return;
-      }
-
       try {
-        const response = await axios.get("https://demcalo.onrender.com/api/auth/me", {
-          headers: { Authorization: `Bearer ${token}` },
+        const response = await axios.get(`https://demcalo.onrender.com/auth/me`, {
+          headers: {
+            ...getAuthHeader(),
+            'Content-Type': 'application/json'
+          }
         });
+  
         if (response.data.success) {
-          setUserEmail(response.data.user.email);
-          setUserXu(response.data.user.xu);
-          setPurchasedMenus(
-            response.data.user.purchasedMenus.map((menu) => menu.menuId)
-          );
-        } else {
-          message.error("Failed to fetch user data.");
-          navigate("/login");
+          setUserData({
+            email: response.data.user.email,
+            xu: response.data.user.xu,
+            purchasedMenus: response.data.user.purchasedMenus?.map(menu => menu.menuId) || []
+          });
         }
       } catch (error) {
-        message.error("Error validating user session. Please log in again.");
-        localStorage.removeItem("token");
-        navigate("/login");
+        console.error('Error fetching user data:', error);
+        if (error.response?.status === 401) {
+          localStorage.removeItem('token');
+          navigate('/login');
+        }
       }
     };
+
+
+
     const fetchMenus = async () => {
       try {
-        const response = await axios.get("https://demcalo.onrender.com/api/menus");
+        const response = await axios.get("https://demcalo.onrender.com/menus", {
+          headers: getAuthHeader()
+        });
+  
         if (response.data.success) {
           setMenus(response.data.data);
           setFilteredMenus(response.data.data);
         }
       } catch (error) {
-        message.error("Failed to load menus");
+        console.error('Error fetching menus:', error);
+        setError(error.response?.data?.message || 'Failed to load menus');
       } finally {
         setLoading(false);
       }
     };
+
+
+
     fetchUserData();
     fetchMenus();
   }, [navigate]);

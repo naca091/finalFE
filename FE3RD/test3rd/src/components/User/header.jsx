@@ -12,7 +12,7 @@ import { useNavigate } from "react-router-dom";
 import logo from "./images/logo.jpg";
 import "./fontend/header.css";
 import "@fortawesome/fontawesome-free/css/all.min.css";
-import AttendanceCalendar from "./AttendanceCalendar";
+import AttendanceCalendar from "./AttendanceCalendar.jsx";
 
 const Header = ({
   userEmail,
@@ -90,7 +90,7 @@ const Header = ({
       </div>
 
       {/* Secondary Navbar */}
-      <div className="navbar secondary-navbar">
+      <div className="secondary-navbar">
         <div className="nav-links">
           <Button
             type="link"

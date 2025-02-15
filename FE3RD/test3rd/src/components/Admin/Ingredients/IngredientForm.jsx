@@ -1,13 +1,27 @@
-import React, { useEffect } from 'react';
-import { Modal, Form, Input, message, Spin } from 'antd';
-import axios from 'axios';
+import React, { useEffect } from "react";
+import { Modal, Form, Input, message, Spin } from "antd";
+import axios from "axios";
+import.meta.env.REACT_APP_API_URL;
+import PropTypes from "prop-types";
+
+
 
 const IngredientForm = ({ visible, onCancel, onSuccess, initialValues }) => {
   const [form] = Form.useForm();
   const isEditing = !!initialValues?._id;
   const [loading, setLoading] = React.useState(false);
 
-  const API_URL = process.env.REACT_APP_API_URL || 'https://demcalo.onrender.com';
+  const API_URL =
+    import.meta.env.REACT_APP_API_URL || "https://demcalo.onrender.com";
+
+    IngredientForm.propTypes = {
+      visible: PropTypes.bool.isRequired,
+      onCancel: PropTypes.func.isRequired,
+      onSuccess: PropTypes.func.isRequired,
+      initialValues: PropTypes.shape({
+        _id: PropTypes.string,
+      }),
+    };
 
   useEffect(() => {
     if (visible) {
@@ -24,18 +38,21 @@ const IngredientForm = ({ visible, onCancel, onSuccess, initialValues }) => {
     try {
       if (isEditing) {
         // Gọi API cập nhật
-        await axios.put(`${API_URL}/api/ingredients/${initialValues._id}`, values);
-        message.success('Ingredient updated successfully');
+        await axios.put(
+          `${API_URL}/api/ingredients/${initialValues._id}`,
+          values
+        );
+        message.success("Ingredient updated successfully");
       } else {
         // Gọi API thêm mới
         await axios.post(`${API_URL}/api/ingredients`, values);
-        message.success('Ingredient added successfully');
+        message.success("Ingredient added successfully");
       }
       form.resetFields();
       if (onSuccess) onSuccess();
     } catch (error) {
-      console.error('Error details:', error.response?.data);
-      const errorMsg = error.response?.data?.message || 'Operation failed';
+      console.error("Error details:", error.response?.data);
+      const errorMsg = error.response?.data?.message || "Operation failed";
       message.error(errorMsg);
     } finally {
       setLoading(false);
@@ -44,7 +61,7 @@ const IngredientForm = ({ visible, onCancel, onSuccess, initialValues }) => {
 
   return (
     <Modal
-      title={isEditing ? 'Edit Ingredient' : 'Add New Ingredient'}
+      title={isEditing ? "Edit Ingredient" : "Add New Ingredient"}
       open={visible}
       onCancel={() => {
         form.resetFields();
@@ -65,8 +82,8 @@ const IngredientForm = ({ visible, onCancel, onSuccess, initialValues }) => {
             name="name"
             label="Ingredient Name"
             rules={[
-              { required: true, message: 'Please input the ingredient name!' },
-              { min: 2, message: 'Name must be at least 2 characters long' },
+              { required: true, message: "Please input the ingredient name!" },
+              { min: 2, message: "Name must be at least 2 characters long" },
             ]}
           >
             <Input placeholder="Enter ingredient name" />

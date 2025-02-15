@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { Table, Button, Space, message, Popconfirm, Spin } from "antd";
 import { EditOutlined, DeleteOutlined, PlusOutlined } from "@ant-design/icons";
 import axios from "axios";
-import IngredientForm from "./IngredientForm";
+import IngredientForm from "./IngredientForm.jsx";
+import.meta.env.REACT_APP_API_URL;
 
 const IngredientList = () => {
   const [ingredients, setIngredients] = useState([]);
@@ -11,7 +12,8 @@ const IngredientList = () => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [editingIngredient, setEditingIngredient] = useState(null);
 
-  const API_URL = process.env.REACT_APP_API_URL || "https://demcalo.onrender.com";
+  const API_URL =
+    import.meta.env.REACT_APP_API_URL || "https://demcalo.onrender.com";
 
   // Fetch ingredients
   const fetchIngredients = async () => {

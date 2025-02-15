@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import { Modal, Form, Input, Select, InputNumber, message, Switch } from 'antd';
 import axios from 'axios';
-
+import.meta.env.REACT_APP_API_URL;
 // Define the API URL constant
-const API_URL = 'https://demcalo.onrender.com/api';
+const API_URL = import.meta.env.REACT_APP_API_URL || 'https://demcalo.onrender.com/api';
 
 const { Option } = Select;
 

@@ -1,6 +1,7 @@
 import React from "react";
 import { Card, Button } from "antd";
 import { UnlockOutlined } from "@ant-design/icons";
+import PropTypes from "prop-types";
 
 const MenuCard = ({ menu, onSeeMenu }) => (
   <Card>
@@ -43,5 +44,15 @@ const MenuCard = ({ menu, onSeeMenu }) => (
     </div>
   </Card>
 );
+
+MenuCard.propTypes = {
+  menu: PropTypes.shape({
+    name: PropTypes.string.isRequired,
+    image: PropTypes.string.isRequired,
+    calories: PropTypes.number.isRequired,
+    unlockPrice: PropTypes.number.isRequired,
+  }).isRequired,
+  onSeeMenu: PropTypes.func.isRequired,
+};
 
 export default MenuCard;

@@ -1,11 +1,13 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { Form, Input, Button, message } from "antd";
+import.meta.env.REACT_APP_API_URL;
+import PropTypes from "prop-types";
 
 const RoleForm = ({ initialValues, onSuccess }) => {
   const [form] = Form.useForm();
   const [loading, setLoading] = useState(false);
 
-  const API_URL = process.env.REACT_APP_API_URL;
+  const API_URL = import.meta.env.REACT_APP_API_URL;
 
   useEffect(() => {
     if (initialValues) {
@@ -40,7 +42,9 @@ const RoleForm = ({ initialValues, onSuccess }) => {
       }
 
       message.success(
-        initialValues ? "Role updated successfully" : "Role created successfully"
+        initialValues
+          ? "Role updated successfully"
+          : "Role created successfully"
       );
       form.resetFields();
       if (onSuccess) {
@@ -51,6 +55,11 @@ const RoleForm = ({ initialValues, onSuccess }) => {
     } finally {
       setLoading(false);
     }
+  };
+  //fix them
+  RoleForm.propTypes = {
+    initialValues: PropTypes.object,
+    onSuccess: PropTypes.func,
   };
 
   return (

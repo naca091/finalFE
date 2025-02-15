@@ -1,11 +1,12 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { Table, Button, Space, message, Popconfirm } from "antd";
 import { EditOutlined, DeleteOutlined, PlusOutlined } from "@ant-design/icons";
 import axios from "axios";
-import CategoryForm from "./CategoryForm";
+import CategoryForm from "./CategoryForm.jsx";
+import.meta.env.REACT_APP_API_URL;
 
 // Lấy URL từ biến môi trường
-const API_URL = process.env.REACT_APP_API_URL || "https://demcalo.onrender.com";
+const API_URL = import.meta.env.REACT_APP_API_URL || "https://demcalo.onrender.com";
 
 const CategoryList = () => {
   const [categories, setCategories] = useState([]);

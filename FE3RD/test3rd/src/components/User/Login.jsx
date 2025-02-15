@@ -1,6 +1,6 @@
 // Login.js
-import React, { useState } from "react";
-import { Form, Input, Button, Card, message } from "antd";
+import { useState } from "react";
+import { Form, Input, Button, message } from "antd";
 import { UserOutlined, LockOutlined } from "@ant-design/icons";
 import axios from "axios";
 import { useNavigate, Link } from "react-router-dom";
@@ -93,7 +93,7 @@ const Login = () => {
             </span>
           </h1>
           <p>
-            Today is a new day. It's your day. You shape it. Sign in to start
+            Today is a new day. It your day. You shape it. Sign in to start
             managing your projects.
           </p>
           <Form name="login" onFinish={onFinish} layout="vertical">
@@ -145,7 +145,7 @@ const Login = () => {
             <div className="footerlogin">
               <div className="text-center">
                 <Button type="link" onClick={() => navigate("/register")}>
-                  Don't have an account? Register
+                  Dont have an account? Register
                 </Button>
               </div>
               <p>© 2024 ALL RIGHTS RESERVED</p>

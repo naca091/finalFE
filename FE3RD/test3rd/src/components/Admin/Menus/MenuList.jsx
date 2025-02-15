@@ -1,8 +1,11 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { Table, Button, Popconfirm, message, Space } from "antd";
 import axios from "axios";
-import MenuForm from "./MenuForm";
+import MenuForm from "./MenuForm.jsx";
+import.meta.env.REACT_APP_API_URL;
 
+const API_URL =
+  import.meta.env.REACT_APP_API_URL || "https://demcalo.onrender.com";
 
 const MenuList = () => {
   const [menus, setMenus] = useState([]);
@@ -10,21 +13,26 @@ const MenuList = () => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [editingMenu, setEditingMenu] = useState(null);
 
-  useEffect(() => {
-    fetchMenus();
-  }, []);
-
   const fetchMenus = async () => {
     setLoading(true);
     try {
-      const response = await axios.get(`https://countlory.onrender.com/api/menus`);
-      setMenus(response.data.data);
+      const response = await axios.get(`${API_URL}/api/menus`);
+      const data = Array.isArray(response.data?.data)
+        ? response.data.data.map((item) => ({ ...item, key: item.id }))
+        : [];
+      setMenus(data);
     } catch (error) {
-      message.error("Failed to fetch menus");
+      message.error(
+        error.response?.data?.message || "Failed to fetch categories"
+      );
     } finally {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    fetchMenus();
+  }, []);
 
   const handleDelete = async (id) => {
     try {
@@ -32,7 +40,7 @@ const MenuList = () => {
       message.success("Menu deleted successfully");
       fetchMenus();
     } catch (error) {
-      message.error("Failed to delete menu");
+      message.error(`Failed to delete menu :${error.message}`);
     }
   };
 

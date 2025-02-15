@@ -1,16 +1,18 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Row, Col, Spin, Card, Carousel, message, Input } from "antd";
-import { useNavigate, useLocation } from "react-router-dom";
-import MenuDetailModal from "./Menu/MenuDetailModal";
-import Header from "./header";
-import Footer from "./footer";
+import { useNavigate } from "react-router-dom";
+import MenuDetailModal from "./Menu/MenuDetailModal.jsx";
+import Header from "./header.jsx";
+import Footer from "./footer.jsx";
 import banner1 from "./images/banner1.jpg";
 import banner2 from "./images/banner2.png";
 import banner3 from "./images/banner3.png";
 import banner4 from "./images/banner4.png";
+import LeftBanner from "./images/left-banner.png";
+import RightBanner from "./images/right-banner.png";
 import "./fontend/homepage.css";
-import MenuFilter from "./Menu/MenuFilter";
+import MenuFilter from "./Menu/MenuFilter.jsx";
 
 const Homepage = () => {
   const navigate = useNavigate();
@@ -59,9 +61,12 @@ const Homepage = () => {
       }
 
       try {
-        const response = await axios.get("https://demcalo.onrender.com/api/auth/me", {
-          headers: { Authorization: `Bearer ${token}` },
-        });
+        const response = await axios.get(
+          "https://demcalo.onrender.com/api/auth/me",
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        );
         if (response.data.success) {
           setUserEmail(response.data.user.email);
           setUserXu(response.data.user.xu);
@@ -73,20 +78,23 @@ const Homepage = () => {
           navigate("/login");
         }
       } catch (error) {
-        message.error("Error validating user session. Please log in again.");
+        message.error(`Error validating user session: ${error.message}`);
         localStorage.removeItem("token");
         navigate("/login");
       }
     };
     const fetchMenus = async () => {
       try {
-        const response = await axios.get("https://demcalo.onrender.com/api/menus");
+        const response = await axios.get(
+          "https://demcalo.onrender.com/api/menus"
+        );
+        console.log("Menus Data:", response.data); //kiem tra
         if (response.data.success) {
           setMenus(response.data.data);
           setFilteredMenus(response.data.data);
         }
       } catch (error) {
-        message.error("Failed to load menus");
+        message.error(`Failed to load menus: ${error.message}`);
       } finally {
         setLoading(false);
       }
@@ -195,6 +203,8 @@ const Homepage = () => {
   };
 
   const bannerImages = [banner1, banner2, banner3, banner4];
+  const banerLeft = [LeftBanner];
+  const bannerRight = [RightBanner];
 
   return (
     <div>
@@ -236,40 +246,68 @@ const Homepage = () => {
         onFilter={handleFilter}
         onClearFilter={handleClearFilter}
       />
-      {loading ? (
-        <Spin size="large" />
-      ) : (
-        <Row gutter={[16, 16]}>
-          {filteredMenus.map((menu) => (
-            <Col span={8} key={menu._id}>
-              <Card
-                hoverable
-                cover={
-                  <img
-                    alt={menu.name}
-                    src={`https://demcalo.onrender.com${menu.image}`}
-                    onError={(e) => {
-                      e.target.onerror = null;
-                      e.target.src = "/placeholder.jpg";
-                    }}
-                  />
-                }
-                onClick={() => handleMenuClick(menu)}
-                style={{ cursor: "pointer" }}
-              >
-                <Card.Meta
-                  title={menu.name}
-                  description={
-                    purchasedMenus.includes(menu._id)
-                      ? "Unlocked"
-                      : `Unlock Price: ${menu.unlockPrice} xu`
-                  }
-                />
-              </Card>
-            </Col>
-          ))}
-        </Row>
-      )}
+
+      <div className="menu-wrapper">
+        {/* Ảnh bên trái */}
+        {banerLeft.map((image, index) => (
+          <img
+            key={index}
+            src={image}
+            alt="Left Banner"
+            className="side-image left-image"
+          />
+        ))}
+
+        {/* Danh sách menu ở giữa */}
+        <div className="menu-container">
+          {loading ? (
+            <Spin size="large" />
+          ) : (
+            <Row gutter={[16, 16]} justify="center">
+              {filteredMenus.map((menu) => (
+                <Col span={8} key={menu._id}>
+                  <Card
+                    hoverable
+                    cover={
+                      <img
+                        alt={menu.name}
+                        src={`https://demcalo.onrender.com${menu.image}`}
+                        onError={(e) => {
+                          e.target.onerror = null;
+                          e.target.src = "/placeholder.jpg";
+                        }}
+                      />
+                    }
+                    onClick={() => handleMenuClick(menu)}
+                    style={{ cursor: "pointer" }}
+                  >
+                    <Card.Meta
+                      title={menu.name}
+                      description={
+                        purchasedMenus.includes(menu._id)
+                          ? "Unlocked"
+                          : `Unlock Price: ${menu.unlockPrice} xu`
+                      }
+                    />
+                  </Card>
+                </Col>
+              ))}
+            </Row>
+          )}
+        </div>
+
+        {/* Ảnh bên phải */}
+        {bannerRight.map((image, index) => (
+          <img
+            key={index}
+            src={image}
+            alt="Right Banner"
+            className="side-image left-image"
+            
+          />
+        ))}
+      </div>
+
       {selectedMenu && (
         <MenuDetailModal
           menu={selectedMenu}

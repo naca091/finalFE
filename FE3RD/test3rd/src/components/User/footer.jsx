@@ -42,7 +42,11 @@ const Footer = () => {
             </div>
             <div className="widget-social">
               <div className="widget-social-item">
-                <a href="#">
+                <a
+                  href="https://www.facebook.com/profile.php?id=61571583361491&locale=vi_VN"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
                   <i className="fab fa-facebook-f"></i>
                 </a>
               </div>

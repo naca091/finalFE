@@ -16,9 +16,12 @@ const AttendanceCalendar = ({ visible, onClose, onAttendanceSuccess }) => {
   const fetchAttendance = async () => {
     try {
       const token = localStorage.getItem("token");
-      const response = await axios.get("https://demcalo.onrender.com/api/attendance", {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const response = await axios.get(
+        "https://demcalo.onrender.com/api/attendance",
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
       if (response.data.success) {
         setAttendanceDates(response.data.data.map((date) => dayjs(date)));
       }
@@ -38,17 +41,24 @@ const AttendanceCalendar = ({ visible, onClose, onAttendanceSuccess }) => {
           headers: { Authorization: `Bearer ${token}` },
         }
       );
-
       if (response.data.success) {
         message.success("Attendance marked successfully! +100 xu");
+        // Đợi một chút trước khi reload trang
+        setTimeout(() => {
+          window.location.reload();
+        }, 1500);
         fetchAttendance();
         onAttendanceSuccess(response.data.newBalance);
       }
     } catch (error) {
       if (error.response?.status === 400) {
         message.warning("You have already marked attendance today");
+        // Đợi một chút trước khi reload trang
+        setTimeout(() => {
+          window.location.reload();
+        }, 1500);
       } else {
-        message.error("Failed to mark attendance");
+        // message.error("Failed to mark attendance");
       }
     } finally {
       setLoading(false);

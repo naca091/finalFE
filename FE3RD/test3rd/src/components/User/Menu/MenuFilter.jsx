@@ -1,5 +1,6 @@
 import React from "react";
 import { Card, Input, Select, Button } from "antd";
+import PropTypes from "prop-types";
 
 const MenuFilter = ({
   filterValues,
@@ -217,6 +218,13 @@ const MenuFilter = ({
       </div>
     </Card>
   );
+};
+MenuFilter.propTypes = {
+  filterValues: PropTypes.object.isRequired,
+  setFilterValues: PropTypes.func.isRequired,
+  categories: PropTypes.array.isRequired,
+  onFilter: PropTypes.func.isRequired,
+  onClearFilter: PropTypes.func.isRequired,
 };
 
 export default MenuFilter;

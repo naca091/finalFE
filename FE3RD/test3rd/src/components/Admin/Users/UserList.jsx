@@ -18,10 +18,11 @@ import {
   WalletOutlined,
 } from "@ant-design/icons";
 import axios from "axios";
-import UserForm from "./UserForm";
-
+import UserForm from "./UserForm.jsx";
+import.meta.env.REACT_APP_API_URL;
 // Define the API URL constant
-const API_URL = 'https://demcalo.onrender.com/api';
+const API_URL =
+  import.meta.env.REACT_APP_API_URL || "https://demcalo.onrender.com/api";
 
 const { Search } = Input;
 
@@ -60,12 +61,9 @@ const UserList = () => {
   // Handle add xu
   const handleAddXu = async () => {
     try {
-      await axios.post(
-        `${API_URL}/users/${selectedUser._id}/add-xu`,
-        {
-          amount: xuAmount,
-        }
-      );
+      await axios.post(`${API_URL}/users/${selectedUser._id}/add-xu`, {
+        amount: xuAmount,
+      });
       message.success("Xu added successfully");
       setIsAddXuModalVisible(false);
       setSelectedUser(null);

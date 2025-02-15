@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import {
   Modal,
   Form,
@@ -12,7 +12,11 @@ import {
 } from "antd";
 import { UploadOutlined } from "@ant-design/icons";
 import axios from "axios";
-const API_URL = process.env.REACT_APP_API_URL || 'https://demcalo.onrender.com';
+import.meta.env.REACT_APP_API_URL;
+import PropTypes from "prop-types";
+
+const API_URL =
+  import.meta.env.REACT_APP_API_URL || "https://demcalo.onrender.com";
 const { Option } = Select;
 
 const MenuForm = ({ visible, onCancel, onSuccess, initialValues }) => {
@@ -22,16 +26,27 @@ const MenuForm = ({ visible, onCancel, onSuccess, initialValues }) => {
   const [loading, setLoading] = useState(false);
   const [fileList, setFileList] = useState([]);
 
+  MenuForm.propTypes = {
+    visible: PropTypes.bool.isRequired,
+    onCancel: PropTypes.func.isRequired,
+    onSuccess: PropTypes.func.isRequired,
+    initialValues: PropTypes.shape({
+      _id: PropTypes.string,
+    }),
+  };
+
   useEffect(() => {
     // Fetch categories and ingredients for dropdowns
     const fetchData = async () => {
       try {
-        const categoriesResponse = await axios.get(`${API_URL}/categories`);
+        const categoriesResponse = await axios.get(`${API_URL}/api/categories`);
         setCategories(categoriesResponse.data.data);
-        const ingredientsResponse = await axios.get(`${API_URL}/ingredients`);
+        const ingredientsResponse = await axios.get(
+          `${API_URL}/api/ingredients`
+        );
         setIngredients(ingredientsResponse.data.data);
       } catch (error) {
-        message.error("Failed to fetch data");
+        message.error(`Failed to fetch data : ${error.message}`);
       }
     };
 
@@ -64,7 +79,9 @@ const MenuForm = ({ visible, onCancel, onSuccess, initialValues }) => {
         formData.append("image", fileList[0].originFileObj);
 
         // Upload ảnh
-        const uploadResponse = await axios.post(`${API_URL}/menus/upload`, formData,
+        const uploadResponse = await axios.post(
+          `${API_URL}/menus/upload`,
+          formData,
           {
             headers: {
               "Content-Type": "multipart/form-data",
@@ -90,8 +107,8 @@ const MenuForm = ({ visible, onCancel, onSuccess, initialValues }) => {
         image: imageUrl,
         cookingTime: {
           prep: values.cookingTimePrep,
-          cook: values.cookingTimeCook
-        }
+          cook: values.cookingTimeCook,
+        },
       };
 
       // Gửi dữ liệu menu
@@ -117,6 +134,21 @@ const MenuForm = ({ visible, onCancel, onSuccess, initialValues }) => {
   };
   const handleFileChange = ({ fileList: newFileList }) => {
     setFileList(newFileList);
+  };
+
+  //fix them
+  MenuForm.propTypes = {
+    visible: PropTypes.bool.isRequired,
+    onCancel: PropTypes.func.isRequired,
+    onSuccess: PropTypes.func.isRequired,
+    initialValues: PropTypes.shape({
+      _id: PropTypes.string,
+      image: PropTypes.string,
+      cookingTime: PropTypes.shape({
+        prep: PropTypes.number,
+        cook: PropTypes.number,
+      }),
+    }),
   };
 
   return (
@@ -145,71 +177,78 @@ const MenuForm = ({ visible, onCancel, onSuccess, initialValues }) => {
 
         {/* Ingredients */}
         <Form.List name="ingredients">
-  {(fields, { add, remove }) => (
-    <>
-      {fields.map(({ key, name, ...restField }) => (
-        <Space key={key} style={{ display: "flex", marginBottom: 8 }}>
-          {/* Ingredient Dropdown with Search */}
-          <Form.Item
-            {...restField}
-            name={[name, "ingredient"]}
-            label="Ingredient"
-            rules={[
-              { required: true, message: "Please select an ingredient!" },
-            ]}
-          >
-            <Select
-              placeholder="Select an ingredient"
-              showSearch
-              filterOption={(input, option) =>
-                option.children.toLowerCase().includes(input.toLowerCase())
-              }
-            >
-              {ingredients.map((ing) => (
-                <Option key={ing._id} value={ing._id}>
-                  {ing.name}
-                </Option>
+          {(fields, { add, remove }) => (
+            <>
+              {fields.map(({ key, name, ...restField }) => (
+                <Space key={key} style={{ display: "flex", marginBottom: 8 }}>
+                  {/* Ingredient Dropdown with Search */}
+                  <Form.Item
+                    {...restField}
+                    name={[name, "ingredient"]}
+                    label="Ingredient"
+                    rules={[
+                      {
+                        required: true,
+                        message: "Please select an ingredient!",
+                      },
+                    ]}
+                  >
+                    <Select
+                      placeholder="Select an ingredient"
+                      showSearch
+                      filterOption={(input, option) =>
+                        option.children
+                          .toLowerCase()
+                          .includes(input.toLowerCase())
+                      }
+                    >
+                      {ingredients.map((ing) => (
+                        <Option key={ing._id} value={ing._id}>
+                          {ing.name}
+                        </Option>
+                      ))}
+                    </Select>
+                  </Form.Item>
+
+                  {/* Weight */}
+                  <Form.Item
+                    {...restField}
+                    name={[name, "weight"]}
+                    label="Weight"
+                    rules={[
+                      { required: true, message: "Please input the weight!" },
+                    ]}
+                  >
+                    <InputNumber min={0} />
+                  </Form.Item>
+
+                  {/* Unit */}
+                  <Form.Item
+                    {...restField}
+                    name={[name, "unit"]}
+                    label="Unit"
+                    rules={[
+                      { required: true, message: "Please input the unit!" },
+                    ]}
+                  >
+                    <Input />
+                  </Form.Item>
+
+                  {/* Remove Button */}
+                  <Button type="link" onClick={() => remove(name)}>
+                    Remove
+                  </Button>
+                </Space>
               ))}
-            </Select>
-          </Form.Item>
-
-          {/* Weight */}
-          <Form.Item
-            {...restField}
-            name={[name, "weight"]}
-            label="Weight"
-            rules={[{ required: true, message: "Please input the weight!" }]}
-          >
-            <InputNumber min={0} />
-          </Form.Item>
-
-          {/* Unit */}
-          <Form.Item
-            {...restField}
-            name={[name, "unit"]}
-            label="Unit"
-            rules={[{ required: true, message: "Please input the unit!" }]}
-          >
-            <Input />
-          </Form.Item>
-
-          {/* Remove Button */}
-          <Button type="link" onClick={() => remove(name)}>
-            Remove
-          </Button>
-        </Space>
-      ))}
-      {/* Add Button */}
-      <Form.Item>
-        <Button type="dashed" onClick={() => add()} block>
-          Add Ingredient
-        </Button>
-      </Form.Item>
-    </>
-  )}
-</Form.List>
-
-
+              {/* Add Button */}
+              <Form.Item>
+                <Button type="dashed" onClick={() => add()} block>
+                  Add Ingredient
+                </Button>
+              </Form.Item>
+            </>
+          )}
+        </Form.List>
 
         {/* Description */}
         <Form.Item name="description" label="Description">
@@ -220,7 +259,9 @@ const MenuForm = ({ visible, onCancel, onSuccess, initialValues }) => {
         <Form.Item
           name="cookingTimePrep"
           label="Preparation Time (minutes)"
-          rules={[{ required: true, message: "Please input preparation time!" }]}
+          rules={[
+            { required: true, message: "Please input preparation time!" },
+          ]}
         >
           <InputNumber min={0} />
         </Form.Item>

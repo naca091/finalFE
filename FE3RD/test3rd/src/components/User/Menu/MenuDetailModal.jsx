@@ -1,8 +1,9 @@
 // MenuDetailModal.js
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { Modal, Button, message, Skeleton } from "antd";
 import { UnlockOutlined, LockOutlined } from "@ant-design/icons";
 import axios from "axios";
+import PropTypes from "prop-types";
 
 const MenuDetailModal = ({
   menu,
@@ -197,6 +198,14 @@ const MenuDetailModal = ({
       {renderMenuContent()}
     </Modal>
   );
+};
+MenuDetailModal.propTypes = {
+  menu: PropTypes.object.isRequired, // or whatever type is expected
+  visible: PropTypes.bool.isRequired,
+  onClose: PropTypes.func.isRequired,
+  userXu: PropTypes.number.isRequired, // or whatever type is expected
+  purchasedMenus: PropTypes.array.isRequired, // or whatever type is expected
+  onPurchaseSuccess: PropTypes.func.isRequired,
 };
 
 export default MenuDetailModal;

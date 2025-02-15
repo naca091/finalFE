@@ -1,9 +1,12 @@
 import React from "react";
 import { Modal, Form, Input, message } from "antd";
 import axios from "axios";
+import.meta.env.REACT_APP_API_URL;
+import PropTypes from "prop-types";
 
 // Lấy URL từ biến môi trường
-const API_URL = process.env.REACT_APP_API_URL || "https://demcalo.onrender.com";
+const API_URL =
+  import.meta.env.REACT_APP_API_URL || "https://demcalo.onrender.com";
 
 const CategoryForm = ({ visible, onCancel, onSuccess, initialValues }) => {
   const [form] = Form.useForm();
@@ -22,7 +25,10 @@ const CategoryForm = ({ visible, onCancel, onSuccess, initialValues }) => {
   const handleSubmit = async (values) => {
     try {
       if (isEditing && initialValues?._id) {
-        await axios.put(`${API_URL}/api/categories/${initialValues._id}`, values);
+        await axios.put(
+          `${API_URL}/api/categories/${initialValues._id}`,
+          values
+        );
         message.success("Category updated successfully");
       } else {
         await axios.post(`${API_URL}/api/categories`, values);
@@ -37,6 +43,15 @@ const CategoryForm = ({ visible, onCancel, onSuccess, initialValues }) => {
       const errorMsg = error.response?.data?.message || "Operation failed";
       message.error(errorMsg);
     }
+  };
+
+  CategoryForm.propTypes = {
+    visible: PropTypes.bool.isRequired,
+    onCancel: PropTypes.func.isRequired,
+    onSuccess: PropTypes.func.isRequired,
+    initialValues: PropTypes.shape({
+      _id: PropTypes.string,
+    }),
   };
 
   return (

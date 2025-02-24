@@ -36,6 +36,12 @@ const UserList = () => {
   const [selectedUser, setSelectedUser] = useState(null);
   const [xuAmount, setXuAmount] = useState(0);
 
+    // Thêm state cho phân trang
+  const [pagination, setPagination] = useState({
+    current: 1,
+    pageSize: 10,
+    total: 0, // Tổng số user, API cần trả về
+  });
   // Fetch users
   const fetchUsers = async () => {
     setLoading(true);

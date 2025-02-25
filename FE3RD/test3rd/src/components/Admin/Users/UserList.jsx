@@ -36,23 +36,35 @@ const UserList = () => {
   const [selectedUser, setSelectedUser] = useState(null);
   const [xuAmount, setXuAmount] = useState(0);
 
-    // Thêm state cho phân trang
+  // Phân trang
   const [pagination, setPagination] = useState({
     current: 1,
     pageSize: 10,
-    total: 0, // Tổng số user, API cần trả về
+    total: 0,
   });
-  // Fetch users
-  const fetchUsers = async () => {
+
+  const fetchUsers = async (page = 1, pageSize = 10) => {
     setLoading(true);
     try {
       const response = await axios.get(`${API_URL}/users`, {
-        params: { search: searchTerm },
+        params: {
+          search: searchTerm,
+          page,
+          limit: pageSize,
+        },
       });
-      const data = Array.isArray(response.data?.data)
-        ? response.data.data.map((item) => ({ ...item, key: item._id }))
-        : [];
+
+      const data = response.data?.data?.map((item) => ({
+        ...item,
+        key: item._id,
+      })) || [];
+
       setUsers(data);
+      setPagination({
+        current: page,
+        pageSize,
+        total: response.data.total || 0,
+      });
     } catch (error) {
       message.error(error.response?.data?.message || "Failed to fetch users");
     } finally {
@@ -183,9 +195,8 @@ const UserList = () => {
           </Button>
           <Button icon={<EditOutlined />} onClick={() => handleEdit(record)} />
           <Popconfirm
-            title={`Are you sure you want to ${
-              record.isActive ? "deactivate" : "activate"
-            } this user?`}
+            title={`Are you sure you want to ${record.isActive ? "deactivate" : "activate"
+              } this user?`}
             onConfirm={() => toggleActivation(record._id, record.isActive)}
             okText="Yes"
             cancelText="No"
@@ -238,19 +249,20 @@ const UserList = () => {
       <Table
         columns={columns}
         dataSource={users}
-        rowKey="_id"
         loading={loading}
-        pagination={{ pageSize: 10 }}
+        pagination={{
+          current: pagination.current,
+          pageSize: pagination.pageSize,
+          total: pagination.total,
+          onChange: (page, pageSize) => fetchUsers(page, pageSize),
+        }}
       />
 
       <UserForm
         visible={isModalVisible}
-        onCancel={handleModalClose}
-        onSuccess={() => {
-          handleModalClose();
-          fetchUsers();
-        }}
-        initialValues={editingUser}
+        onClose={handleModalClose}
+        user={editingUser}
+        refreshUsers={() => fetchUsers(pagination.current, pagination.pageSize)}
       />
 
       <Modal

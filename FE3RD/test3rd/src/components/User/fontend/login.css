@@ -22,9 +22,8 @@
 }
 
 .register {
-  align-items: flex-start;
-  padding-top: 50%;
-  padding-bottom: 0;
+  align-items: flex-end;
+  padding-bottom: 30%;
 }
 
 .profile {

@@ -17,6 +17,15 @@
   padding-left: 10%;
 }
 
+.login {
+  align-items: center;
+}
+
+.register {
+  align-items: flex-end;
+  padding-bottom: 10%;
+}
+
 .profile {
   margin: 0;
   font-family: "Inter", sans-serif;

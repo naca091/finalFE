@@ -6,14 +6,15 @@
   background-color: #00bfff4d;
   background-image: url('../images/login.jpg');
   background-size: cover;
-  background-position: center;
+  background-position: right center;
   background-repeat: no-repeat;
   display: flex;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
   height: auto;
   color: #333;
   min-height: 100vh;
+  padding-left: 10%;
 }
 
 .profile {
@@ -29,11 +30,11 @@
 }
 
 .container {
-  background-color: #ffffff;
+  background-color: rgba(255, 255, 255, 0.85);
   border-radius: 20px;
   display: flex;
   overflow: hidden;
-  max-width: 1200px;
+  max-width: 450px;
   width: 100%;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
@@ -44,8 +45,7 @@
 }
 
 .image-container {
-  flex: 1;
-  display: flex;
+  display: none;
 }
 
 @media (max-width: 768px) {
@@ -54,14 +54,12 @@
   .resetpassword {
     flex-direction: column;
     padding: 20px;
+    background-position: center;
+    justify-content: center;
   }
 
   .container {
     flex-direction: column;
     max-width: 100%;
-  }
-
-  .image-container {
-    display: none;
   }
 }

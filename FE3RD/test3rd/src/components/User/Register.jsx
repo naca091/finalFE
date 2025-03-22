@@ -112,14 +112,7 @@ const Register = () => {
             </div>
           </Form>
         </div>
-        <div className="image-container">
-          <img
-            alt="A beautiful image to inspire registration."
-            height="600"
-            src="https://storage.googleapis.com/a1aa/image/PljjEMSYjA7RDZGiXbl2V8co53pwHfSTOfEztlF93eq6t4EoA.jpg"
-            width="450"
-          />
-        </div>
+
       </div>
     </div>
   );
